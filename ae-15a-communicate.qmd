@@ -1,9 +1,16 @@
 ---
 title: "Application Exercise 15 - Communicate your results"
-format: revealjs
+format:
+  html:
+    toc: true
+  revealjs: default
+author:
+  - name: Lars Schöbitz
+  - name: Another Author
 editor: source
 editor_options: 
   chunk_output_type: console
+bibliography: 05-the-recycled.bib
 execute:
   echo: false
   warning: false
@@ -46,11 +53,33 @@ waste_generation_tbl <- waste_generation_tidy %>%
 
 ## What a Waste!
 
+- What a Waste is a global project to aggregate data on solid waste management from around the world [@world2019what]
+
 # Results & Discussion
 
-## Waste generation 
+## Waste generation - Summary
 
-- See @tbl-waste-generation
+```{r}
+mean_waste_generation_high_income <- waste_generation_tbl %>% 
+  filter(income_cat == "high income") %>% 
+  pull(mean)
+
+mean_waste_generation_low_income <- waste_generation_tbl %>% 
+  filter(income_cat == "low income") %>% 
+  pull(mean)
+
+no_of_countries <- waste_generation_tbl %>% 
+  pull(count) %>% 
+  sum()
+
+```
+
+- Data was available for `r no_of_countries`
+- High income countries have an average waste generation of `r round(mean_waste_generation_high_income)` kg/cap/year
+- Low income countries have an average waste generation of `r round(mean_waste_generation_low_income)` kg/cap/year
+- Results for all income categories are shown in @tbl-waste-generation and @fig-waste-generation
+
+## Waste generation - Table
 
 ```{r}
 #| label: tbl-waste-generation
@@ -62,9 +91,7 @@ waste_generation_tbl %>%
 
 ```
 
-## Waste generation 
-
-- See @fig-waste-generation
+## Waste generation - Plot
 
 ```{r}
 #| label: fig-waste-generation
@@ -87,3 +114,6 @@ ggplot(data = waste_generation_tidy,
         legend.position = "none") 
 
 ```
+
+# References
+
