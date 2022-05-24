@@ -4,10 +4,55 @@ format: html
 editor: source
 editor_options: 
   chunk_output_type: console
-bibliography: references.bib
 execute:
-  echo: true
+  echo: false
   warning: false
-  message: false
 ---
 
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+waste_data <- read_csv("data/raw_data/msw-generation-and-composition-by-income.csv")
+```
+
+```{r}
+income_cat_levels <- c("low income", "lower-middle income", "upper-middle income", "high income")
+
+waste_generation_tbl <- waste_data %>% 
+  drop_na(msw_capita_kg_year) %>% 
+  mutate(income_cat = factor(income_cat, levels = income_cat_levels)) %>% 
+  group_by(income_cat) %>% 
+  summarise(
+    count = n(),
+    min = min(msw_capita_kg_year),
+    mean = mean(msw_capita_kg_year),
+    sd = sd(msw_capita_kg_year),
+    max = max(msw_capita_kg_year)
+  )
+```
+
+
+# Introduction
+
+## What a Waste!
+
+# Results & Discussion
+
+## Waste generation 
+
+- See @tbl-waste-generation
+
+```{r}
+#| label: tbl-waste-generation
+#| tbl-cap: "Waste generation by income category."
+
+waste_generation_tbl %>% 
+  rename(`income category` = income_cat) %>% 
+  knitr::kable(digits = 0)
+
+```
+
+## Waste generation 
