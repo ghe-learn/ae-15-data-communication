@@ -1,6 +1,6 @@
 ---
-title: "Application Exercise 13 - Data wrangling with tidyr"
-format: html
+title: "Application Exercise 15 - Communicate your results"
+format: revealjs
 editor: source
 editor_options: 
   chunk_output_type: console
@@ -21,9 +21,15 @@ waste_data <- read_csv("data/raw_data/msw-generation-and-composition-by-income.c
 ```{r}
 income_cat_levels <- c("low income", "lower-middle income", "upper-middle income", "high income")
 
-waste_generation_tbl <- waste_data %>% 
+waste_generation_tidy <- waste_data %>% 
   drop_na(msw_capita_kg_year) %>% 
-  mutate(income_cat = factor(income_cat, levels = income_cat_levels)) %>% 
+  mutate(income_cat = factor(income_cat, levels = income_cat_levels)) 
+
+```
+
+```{r}
+
+waste_generation_tbl <- waste_generation_tidy %>% 
   group_by(income_cat) %>% 
   summarise(
     count = n(),
@@ -32,6 +38,7 @@ waste_generation_tbl <- waste_data %>%
     sd = sd(msw_capita_kg_year),
     max = max(msw_capita_kg_year)
   )
+
 ```
 
 
@@ -56,3 +63,27 @@ waste_generation_tbl %>%
 ```
 
 ## Waste generation 
+
+- See @fig-waste-generation
+
+```{r}
+#| label: fig-waste-generation
+#| fig-cap: "Waste generation by income category."
+
+ggplot(data = waste_generation_tidy,
+       mapping = aes(x = income_cat, 
+                     y = msw_capita_kg_year,
+                     color = income_cat)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(width = 0.2) +
+  scale_y_continuous(breaks = seq(0, 1600, 200)) +
+  scale_color_brewer(type = "qual", palette = "Paired") +
+  labs(title = "Waste generation by income category",
+       x = NULL,
+       y = "MSW generation per capita [kg/year]") +
+  theme_minimal(base_size = 14) +
+  theme(panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        legend.position = "none") 
+
+```
