@@ -1,12 +1,13 @@
 ---
 title: "Waste Composition Study" 
 format: revealjs
+self-contained: true
 editor: source
 execute: 
   echo: false
   warning: false
 params:
-  country: Angola
+  country: "Angola"
 editor_options: 
   chunk_output_type: console
 ---
@@ -23,12 +24,12 @@ waste_data_long <- read_rds("data/intermediate_data/msw-generation-and-compositi
 ```{r}
 
 waste_data_country <- waste_data_long %>% 
-  filter(country_name == params$country) 
+  filter(country_name == params$country)
 ```
 
-# Waste Composition 
+# Results
 
-## `r params$country`
+## Country: `r params$country`
 
 ```{r}
 
