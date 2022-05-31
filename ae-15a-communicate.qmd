@@ -12,27 +12,63 @@ editor_options:
   chunk_output_type: console
 bibliography: 05-the-recycled.bib
 execute:
-  echo: false
+  echo: true
   warning: false
 ---
+
+# Exam Practice
+
+## Task 1.0 (0.5)
+
+1. Render the document and fix any errors.
 
 ```{r}
 library(tidyverse)
 ```
 
+## Task 1.1 (1)
+
+**Fill in the blanks**
+
+1. Use the `read_csv` function to import the following CSV file from the "data/raw_data/" directory:
+
+- `msw-generation-and-composition-by-income.csv`, and assign to the object `waste_data`
+
+2. Next to the code-chunk option `#| eval:` change the value from `false` to `true`
 
 ```{r}
+#| eval: true
+
 waste_data <- read_csv("data/raw_data/msw-generation-and-composition-by-income.csv")
 ```
 
+## Task 1.2 (2)
+
+**Write the code yourself**
+
+1. Start with the `waste_data` object and use a function of your choice to create a subset that removes NAs from the variable that stores values for municipal solid waste generation.
+
+2. Use the pipe operator to add another line of code which uses the `mutate()` function to convert the `income_cat` variable from a variable of type character to a variable of type factor. Define the factor levels yourself.
+
+3. Store the result as a new object in your environment with the name `waste_generation_tidy` 
+ 
 ```{r}
-income_cat_levels <- c("low income", "lower-middle income", "upper-middle income", "high income")
+
+income_cat_levels <- c("low income", "lower-middle income", "upper-middle income", "high income") 
 
 waste_generation_tidy <- waste_data %>% 
   drop_na(msw_capita_kg_year) %>% 
   mutate(income_cat = factor(income_cat, levels = income_cat_levels)) 
 
 ```
+
+## Task 1.3 (6)
+
+1. Use functions taught during the course to answer the following question for the `waste_generation_tidy` data object: 
+
+What is the minimum, mean, standard deviation, and maximum of the municipal solid waste generation grouped by income? Also add the count for the number of countries in each income category.
+
+2. Store the result as a new object in your environment with the name `waste_generation_tbl`. 
 
 ```{r}
 
@@ -45,9 +81,13 @@ waste_generation_tbl <- waste_generation_tidy %>%
     sd = sd(msw_capita_kg_year),
     max = max(msw_capita_kg_year)
   )
-
 ```
 
+# Task 1.4 - Hand-in (0.5)
+
+1. Render the document and fix any errors.
+
+Last complete render: `r Sys.time()` at timezone `r Sys.timezone()`.
 
 # Introduction
 
@@ -60,6 +100,12 @@ waste_generation_tbl <- waste_generation_tidy %>%
 ## Waste generation - Summary
 
 ```{r}
+# Question: How many countries are covered in this dataset?
+no_of_countries <- waste_generation_tidy %>% 
+  count(country_name) %>% 
+  nrow()
+
+# Question: What is the mean 
 mean_waste_generation_high_income <- waste_generation_tbl %>% 
   filter(income_cat == "high income") %>% 
   pull(mean)
@@ -68,13 +114,9 @@ mean_waste_generation_low_income <- waste_generation_tbl %>%
   filter(income_cat == "low income") %>% 
   pull(mean)
 
-no_of_countries <- waste_generation_tbl %>% 
-  pull(count) %>% 
-  sum()
-
 ```
 
-- Data was available for `r no_of_countries`
+- Data was available for `r no_of_countries` countries
 - High income countries have an average waste generation of `r round(mean_waste_generation_high_income)` kg/cap/year
 - Low income countries have an average waste generation of `r round(mean_waste_generation_low_income)` kg/cap/year
 - Results for all income categories are shown in @tbl-waste-generation and @fig-waste-generation
