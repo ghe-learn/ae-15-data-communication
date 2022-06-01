@@ -40,3 +40,9 @@ vignettes/*.pdf
 
 # Mac files
 .DS_Store
+
+# Solutions
+
+*-solutions.R
+*-solutions.qmd
+*-solutions.html

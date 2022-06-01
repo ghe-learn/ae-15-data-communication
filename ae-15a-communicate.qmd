@@ -1,20 +1,11 @@
 ---
 title: "Application Exercise 15 - Communicate your results"
-format:
-  html:
-    toc: true
-  revealjs: default
-author:
-  - name: Lars Schöbitz
-  - name: Another Author
+format: html
 editor: source
-self-contained: true
 editor_options: 
   chunk_output_type: console
-bibliography: 05-the-recycled.bib
 execute:
-  echo: true
-  warning: false
+  eval: false
 ---
 
 # Exam Practice
@@ -38,9 +29,7 @@ library(tidyverse)
 2. Next to the code-chunk option `#| eval:` change the value from `false` to `true`
 
 ```{r}
-#| eval: true
-
-waste_data <- read_csv("data/raw_data/msw-generation-and-composition-by-income.csv")
+waste_data <- ___(___)
 ```
 
 ## Task 1.2 (2)
@@ -55,15 +44,12 @@ waste_data <- read_csv("data/raw_data/msw-generation-and-composition-by-income.c
  
 ```{r}
 
-income_cat_levels <- c("low income", "lower-middle income", "upper-middle income", "high income") 
-
-waste_generation_tidy <- waste_data %>% 
-  drop_na(msw_capita_kg_year) %>% 
-  mutate(income_cat = factor(income_cat, levels = income_cat_levels)) 
 
 ```
 
 ## Task 1.3 (6)
+
+**Write the code yourself**
 
 1. Use functions taught during the course to answer the following question for the `waste_generation_tidy` data object: 
 
@@ -73,18 +59,9 @@ What is the minimum, mean, standard deviation, and maximum of the municipal soli
 
 ```{r}
 
-waste_generation_tbl <- waste_generation_tidy %>% 
-  group_by(income_cat) %>% 
-  summarise(
-    count = n(),
-    min = min(msw_capita_kg_year),
-    mean = mean(msw_capita_kg_year),
-    sd = sd(msw_capita_kg_year),
-    max = max(msw_capita_kg_year)
-  )
 ```
 
-# Task 1.4 - Hand-in (0.5)
+## Task 1.4 - Hand-in (0.5)
 
 1. Render the document and fix any errors.
 
@@ -94,39 +71,50 @@ Last complete render: `r Sys.time()` at timezone `r Sys.timezone()`.
 
 ## What a Waste!
 
-- What a Waste is a global project to aggregate data on solid waste management from around the world [@world2019what]
+What a Waste is a global project to aggregate data on solid waste management from around the world [@world2019what].
 
 # Results & Discussion
 
 ## Waste generation - Summary
 
 ```{r}
-# Question: How many countries are covered in this dataset?
-no_of_countries <- waste_generation_tidy %>% 
-  count(country_name) %>% 
-  nrow()
+#| eval: false
+#| echo: false
 
-# Question: What is the mean 
-mean_waste_generation_high_income <- waste_generation_tbl %>% 
-  filter(income_cat == "high income") %>% 
-  pull(mean)
+# Use functions taught during the course to answer the following question:
+# Q: How many countries are covered in the data object waste_generation_tidy?
 
-mean_waste_generation_low_income <- waste_generation_tbl %>% 
-  filter(income_cat == "low income") %>% 
-  pull(mean)
 
 ```
 
-- Data was available for `r no_of_countries` countries
-- High income countries have an average waste generation of `r round(mean_waste_generation_high_income)` kg/cap/year
-- Low income countries have an average waste generation of `r round(mean_waste_generation_low_income)` kg/cap/year
-- Results for all income categories are shown in @tbl-waste-generation and @fig-waste-generation
+
+```{r}
+#| eval: false
+#| echo: false
+
+# Use functions taught during the course to answer the following question:
+# Q: How many countries are in each income category? 
+
+
+```
+
+
+```{r}
+#| echo: false
+
+# Include single values as inline code
+
+```
+
+- Data was available for ___ countries
+- High income countries have an average waste generation of ___ kg/cap/year
+- Low income countries have an average waste generation of ___ kg/cap/year
+- Results for all income categories are shown in ___ and ___
 
 ## Waste generation - Table
 
 ```{r}
-#| label: tbl-waste-generation
-#| tbl-cap: "Waste generation by income category."
+#| echo: false
 
 waste_generation_tbl %>% 
   rename(`income category` = income_cat) %>% 
@@ -137,8 +125,7 @@ waste_generation_tbl %>%
 ## Waste generation - Plot
 
 ```{r}
-#| label: fig-waste-generation
-#| fig-cap: "Waste generation by income category."
+#| echo: false
 
 ggplot(data = waste_generation_tidy,
        mapping = aes(x = income_cat, 
@@ -151,7 +138,7 @@ ggplot(data = waste_generation_tidy,
   labs(title = "Waste generation by income category",
        x = NULL,
        y = "MSW generation per capita [kg/year]") +
-  theme_minimal(base_size = 14) +
+  theme_minimal(base_size = 16) +
   theme(panel.grid.minor = element_blank(),
         panel.grid.major.x = element_blank(),
         legend.position = "none") 
